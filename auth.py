@@ -1,8 +1,11 @@
 from pathlib import Path
 
 import bcrypt
+import sqlite3
 
 USERS_FILE = Path(__file__).parent / "DATA" / "users.txt"
+
+DB_PATH = path(__file__).parent / "DATA" / "app.db"
 
 
 def generate_hash(password):
@@ -59,6 +62,7 @@ def login_user(username, password, path=USERS_FILE):
     return False, "Wrong username or password."      # the same message for both problems, on purpose
 
 
+
 def main():
     """A small menu to try it out."""
     while True:
@@ -78,4 +82,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users
+    id INTEGER PRIMARY KEY AUTOINREMENT, username TEXT, password_hash TEXT)''')
+
+    con.commit()
